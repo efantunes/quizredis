@@ -1,0 +1,2 @@
+redis
+names_generator
