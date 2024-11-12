@@ -49,10 +49,12 @@ if __name__ == '__main__':
     with redis.Redis(connection_pool=redis_pool) as r1:
         global r
         r=r1
-
-        # 0. avaliação de performance da captura de respostas
+        print ("")
+        # 0. Avaliação de performance da captura de respostas
+        print ("0. Avaliação de performance da captura de respostas")
         print(timeit.timeit(stmt='answer_service.register_response("quiz:1:question:1","1","b",16)',setup="from __main__ import answer_service",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #1. Alternativas mais votadas
+        print ("1. Alternativas mais votadas")
         print(ranking_alternativas("quiz:1"))
         print(ranking_alternativas("quiz:2"))
         print(timeit.timeit(stmt='ranking_alternativas("quiz:1")',setup="from __main__ import ranking_alternativas",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
@@ -60,6 +62,7 @@ if __name__ == '__main__':
         #2. Questoes mais acertadas
         #3. Questoes com mais abstencoes
         #4. Tempo medio de resposta por questao
+        print ("4. Tempo medio de resposta por questao")
         print(ranking_tempo_medio("quiz:1"))
         print(ranking_tempo_medio("quiz:2"))
         print(timeit.timeit(stmt='ranking_tempo_medio("quiz:1")',setup="from __main__ import ranking_tempo_medio",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
