@@ -1,0 +1,5 @@
+redis
+names_generator
+fastapi[standard]
+setuptools
+pydantic 
