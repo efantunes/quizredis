@@ -3,11 +3,13 @@ from names_generator import generate_name
 from multiprocessing import Pool
 import random
 from quizmemory.service.answer_service import AnswerService
+from quizmemory.service.enroll_service import EnrollService
 from quizmemory.config.redis_config import REDIS_HOST,REDIS_PORT
 
 MAX_PROCESS = 20
 redis_pool = redis.ConnectionPool(max_connections=MAX_PROCESS,host=REDIS_HOST, port=REDIS_PORT, db=0, decode_responses=True)
 anser_service = AnswerService(redis_pool)
+enroll_service = EnrollService(redis_pool)
 
 # def register_and_answer(id):
 #     # print("Hello")
@@ -47,9 +49,9 @@ def register_and_answer_v2(id):
             "nome" : generate_name(style="capital")
         })
         
-        chosen_quiz = random.choices(['1','2'])
-        r.lpush(f'participants:quiz:{chosen_quiz}',id)
-        questions_ids = r.lrange(f'quiz:{chosen_quiz[0]}:questions',0,-1)
+        chosen_quiz = random.choices(['1','2'])[0]
+        enroll_service.enroll(f'quiz:{chosen_quiz}',f'student:{id}')
+        questions_ids = r.lrange(f'quiz:{chosen_quiz}:questions',0,-1)
         # print(f'quiz:{chosen_quiz[0]}:questions')
         # print(questions_ids)
         for question_id in questions_ids:

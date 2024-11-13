@@ -1,7 +1,8 @@
 from typing import Union
 
 from fastapi import FastAPI
-from quizmemory.service.answer_service import AnswerService, EnrollService
+from quizmemory.service.answer_service import AnswerService
+from quizmemory.service.enroll_service import  EnrollService
 from quizmemory.config.redis_config import REDIS_HOST,REDIS_PORT
 import redis
 from quizmemory.model.answer_request import AnswerRequest,EnrollRequest

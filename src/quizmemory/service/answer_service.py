@@ -37,5 +37,5 @@ class AnswerService:
             if correct_answer == chosen_answer:
                 r.incr(f'statistics:{question_id}:total_correct') 
                 r.expire(f'statistics:{question_id}:total_correct',EXPIRATION_TIME) #30 dias
-                r.incr(f'statistics:{quiz_id}:student:{student_id}') 
-                r.expire(f'statistics:{quiz_id}:student:{student_id}',EXPIRATION_TIME) #30 dias
+                r.zincrby(f'leaderboard:mais_acertos:{quiz_id}',1,f'student:{student_id}') 
+                r.expire(f'leaderboard:mais_acertos:{quiz_id}',EXPIRATION_TIME) #30 dias

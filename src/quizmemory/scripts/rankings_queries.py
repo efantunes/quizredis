@@ -47,19 +47,29 @@ def ranking_questoes_corretas(quiz_id):
     acertos_por_questao = {question_id:r.get(f'statistics:{question_id}:total_correct') for question_id in questions}
     return sorted(acertos_por_questao.items(),key = lambda x: -x[1])
 
-def ranking_alunos_maior_acerto(quiz_id):
-    participants = r.lrange("participants:{quiz_id}",0,-1)
-    pontuacao_total_acertos =  {participant:r.get(f'statistics:{quiz_id}:{participant}') for participant in participants}
+# def ranking_alunos_maior_acerto(quiz_id):
+#     participants = r.lrange(f"participants:{quiz_id}",0,-1)
+#     # print(participants)
+#     pontuacao_total_acertos = dict()
+#     for participant in participants:
+#         acertos = r.get(f'statistics:{quiz_id}:{participant}')
+#         if acertos:
+#             pontuacao_total_acertos[participant]=acertos
         
-    return sorted(pontuacao_total_acertos.items(), key= lambda x:-int(x[1]))
+#     return sorted(pontuacao_total_acertos.items(), key= lambda x:-int(x[1]))
     # questions = r.lrange(f'{quiz_id}:questions',0,-1)
     # acertos_por_questao = {question_id:r.get(f'statistics:{question_id}:total_correct') for question_id in questions}
     # return sorted(acertos_por_questao.items(),key = lambda x: -x[1])
+def ranking_alunos_maior_acerto(quiz_id):
+    return r.zrevrange(f'leaderboard:mais_acertos:{quiz_id}',0,-1,withscores=True)
 
+   
+        
+     
 
 
 if __name__ == '__main__':
-    NUMBER_OF_TESTS = 500
+    NUMBER_OF_TESTS = 10
     
     with redis.Redis(connection_pool=redis_pool) as r1:
         global r
@@ -92,6 +102,6 @@ if __name__ == '__main__':
         print ("6.Alunos com maior acerto")
         print(ranking_alunos_maior_acerto("quiz:1"))
         print(ranking_alunos_maior_acerto("quiz:2"))
-        # print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:1")',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
-        # print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:2")',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
+        print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:1")',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
+        print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:2")',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #7. Alunos mais rapidos
