@@ -36,10 +36,25 @@ def calcula_alternativas_per_question(question_id):
         ) for alternativa in alternativas
     }
     return (sorted(total_votos_por_alternativa.items(),key=lambda x:-x[1]))
+
         
 def ranking_alternativas(quiz_id):
     questions = r.lrange(f'{quiz_id}:questions',0,-1)
     return {question_id:calcula_alternativas_per_question(question_id) for question_id in questions}
+
+def ranking_questoes_corretas(quiz_id):
+    questions = r.lrange(f'{quiz_id}:questions',0,-1)
+    acertos_por_questao = {question_id:r.get(f'statistics:{question_id}:total_correct') for question_id in questions}
+    return sorted(acertos_por_questao.items(),key = lambda x: -x[1])
+
+def ranking_alunos_maior_acerto(quiz_id):
+    participants = r.lrange("participants:{quiz_id}",0,-1)
+    pontuacao_total_acertos =  {participant:r.get(f'statistics:{quiz_id}:{participant}') for participant in participants}
+        
+    return sorted(pontuacao_total_acertos.items(), key= lambda x:-int(x[1]))
+    # questions = r.lrange(f'{quiz_id}:questions',0,-1)
+    # acertos_por_questao = {question_id:r.get(f'statistics:{question_id}:total_correct') for question_id in questions}
+    # return sorted(acertos_por_questao.items(),key = lambda x: -x[1])
 
 
 
@@ -60,6 +75,11 @@ if __name__ == '__main__':
         print(timeit.timeit(stmt='ranking_alternativas("quiz:1")',setup="from __main__ import ranking_alternativas",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         print(timeit.timeit(stmt='ranking_alternativas("quiz:2")',setup="from __main__ import ranking_alternativas",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #2. Questoes mais acertadas
+        # print ("2. Questoes mais acertadas")
+        # print(ranking_questoes_corretas("quiz:1"))
+        # print(ranking_questoes_corretas("quiz:2"))
+        # print(timeit.timeit(stmt='ranking_questoes_corretas("quiz:1")',setup="from __main__ import ranking_questoes_corretas",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
+        # print(timeit.timeit(stmt='ranking_questoes_corretas("quiz:2")',setup="from __main__ import ranking_questoes_corretas",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #3. Questoes com mais abstencoes
         #4. Tempo medio de resposta por questao
         print ("4. Tempo medio de resposta por questao")
@@ -69,4 +89,9 @@ if __name__ == '__main__':
         print(timeit.timeit(stmt='ranking_tempo_medio("quiz:2")',setup="from __main__ import ranking_tempo_medio",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #5.Alunos com acertos mais rapidos
         #6.Alunos com maior acerto
+        print ("6.Alunos com maior acerto")
+        print(ranking_alunos_maior_acerto("quiz:1"))
+        print(ranking_alunos_maior_acerto("quiz:2"))
+        # print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:1")',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
+        # print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:2")',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #7. Alunos mais rapidos
