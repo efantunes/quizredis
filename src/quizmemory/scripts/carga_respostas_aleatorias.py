@@ -66,8 +66,8 @@ if __name__ == '__main__':
     ##### ALUNOS
     print("Iniciando processo")
     # N_STUDENTS = 1_000_000 #para o teste final
-    N_STUDENTS = 200_000 #para desenvlvimento de testes mais rapidos 
-    # N_STUDENTS = 1_000 #para desenvlvimento de testes mais rapidos 
+    # N_STUDENTS = 200_000 #para desenvlvimento de testes mais rapidos 
+    N_STUDENTS = 50_000 #para desenvlvimento de testes mais rapidos 
     # register_and_answer(1)
     with Pool(MAX_PROCESS) as p:
         print("Pool Criada")

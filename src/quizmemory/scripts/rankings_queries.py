@@ -62,6 +62,7 @@ def ranking_questoes_corretas(quiz_id):
     # return sorted(acertos_por_questao.items(),key = lambda x: -x[1])
 def ranking_alunos_maior_acerto(quiz_id):
     return r.zrevrange(f'leaderboard:mais_acertos:{quiz_id}',0,-1,withscores=True)
+    # return r.zrevrange(f'leaderboard:mais_acertos:{quiz_id}',0,1000,withscores=True)
 
    
         
@@ -69,7 +70,7 @@ def ranking_alunos_maior_acerto(quiz_id):
 
 
 if __name__ == '__main__':
-    NUMBER_OF_TESTS = 10
+    NUMBER_OF_TESTS = 50
     
     with redis.Redis(connection_pool=redis_pool) as r1:
         global r
