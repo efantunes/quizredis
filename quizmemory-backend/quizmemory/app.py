@@ -1,20 +1,36 @@
 from typing import Union
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from quizmemory.service.answer_service import AnswerService
 from quizmemory.service.enroll_service import  EnrollService
-from quizmemory.config.redis_config import REDIS_HOST,REDIS_PORT
+from quizmemory.service.question_service import  QuestionService
+from quizmemory.config.redis_config import MyRedisSingletonPool
 import redis
 from quizmemory.model.answer_request import AnswerRequest,EnrollRequest
 
 MAX_PROCESS = 20
-redis_pool = redis.ConnectionPool(max_connections=MAX_PROCESS,host=REDIS_HOST, port=REDIS_PORT, db=0, decode_responses=True)
-answer_service = AnswerService(redis_pool)
-enroll_service = EnrollService(redis_pool)
+answer_service = AnswerService(MyRedisSingletonPool.get_instance())
+enroll_service = EnrollService(MyRedisSingletonPool.get_instance())
+question_service = QuestionService(MyRedisSingletonPool.get_instance())
 
+origins = [
+    "http://localhost",
+    "http://localhost:5000",
+    "http://localhost:5001",
+    "http://localhost:4200",
+    "*",
+]
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
@@ -37,3 +53,12 @@ def post_enroll(quiz_num: int, request_body:EnrollRequest):
         student_id=request_body.student_id,
     )
     return {"status": "Sucesso"}
+
+@app.get("/quiz")
+def get_all_quizzes():
+    return question_service.gel_all_quizzes()
+
+@app.get("/quiz/{quiz_num}/questions")
+def get_all_quizzes(quiz_num:int):
+    return question_service.get_questions(quiz_num)
+    

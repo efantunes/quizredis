@@ -1,0 +1,20 @@
+services:
+  web-front:
+    build: ./quizmemory-frontend
+    ports:
+      - "5001:5001"
+    environment:
+      REDIS_HOST: "quizredis-redis-1"
+      REDIS_PORT: 6379
+  web-back:
+    build: ./quizmemory-backend
+    ports:
+      - "5000:5000"
+    environment:
+      REDIS_HOST: "quizredis-redis-1"
+      REDIS_PORT: 6379
+  redis:
+    image: "redis/redis-stack:latest"
+    ports:
+      - "8001:8001"
+      - "6379:6379"

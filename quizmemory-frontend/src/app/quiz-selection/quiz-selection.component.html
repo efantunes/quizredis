@@ -1,0 +1,12 @@
+<div class="quiz-selection-container">
+    <h1>Selecione um Quiz</h1>
+    
+      <ul>
+        <li *ngFor="let quiz of quizzes" (click)="selectQuiz(quiz.id)">
+          {{ quiz.title }}
+        </li>
+      </ul>
+  
+    
+  </div>
+  

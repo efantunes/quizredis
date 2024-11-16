@@ -1,0 +1,25 @@
+<div class="quiz-play-container">
+    <h1>{{ quizName }}</h1>
+    <p>Tempo restante: {{ timeLeft }} segundos</p>
+  
+    <div *ngIf="currentQuestion">
+      <h2>{{ currentQuestion.question }}</h2>
+      <ul>
+        <li (click)="selectAnswer('A')">
+          {{ currentQuestion.A }}
+        </li>
+        <li (click)="selectAnswer('B')">
+          {{ currentQuestion.B }}
+        </li>
+        <li (click)="selectAnswer('C')">
+          {{ currentQuestion.C }}
+        </li>
+        <li (click)="selectAnswer('D')">
+          {{ currentQuestion.D }}
+        </li>
+      </ul>
+    </div>
+  
+    <p *ngIf="!currentQuestion">Quiz concluído! Pontuação: {{ score }}</p>
+  </div>
+  
