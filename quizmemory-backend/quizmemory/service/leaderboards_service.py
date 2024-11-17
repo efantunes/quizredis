@@ -41,9 +41,9 @@ class LeaderboardsService:
         with redis.Redis(connection_pool=self.redis_pool) as r:
             return r.zrevrange(f'leaderboard:mais_rapidos_corretos_e_acertos:{quiz_id}',0,qnt,withscores=True)
         # return r.zrange(,0,-1,withscores=True)
-    def ranking_mais_rapidos(self,quiz_id):
+    def ranking_mais_rapidos(self,quiz_id,qnt=-1):
         with redis.Redis(connection_pool=self.redis_pool) as r:
-            return r.zrange(f'leaderboard:{quiz_id}:mais_rapido',0,-1,withscores=True)
+            return r.zrange(f'leaderboard:{quiz_id}:mais_rapido',0,qnt,withscores=True)
     def get_leaderboard(self,quiz_num,leaderboard_num):
         match leaderboard_num:
             case 1:
@@ -55,11 +55,11 @@ class LeaderboardsService:
             case 4:
                 return self.ranking_tempo_medio(f'quiz:{quiz_num}')
             case 5:
-                return self.ranking_mais_rapidos_corretos(f'quiz:{quiz_num}',100)
+                return self.ranking_mais_rapidos_corretos(f'quiz:{quiz_num}',10)
             case 6:
-                return self.ranking_alunos_maior_acerto(f'quiz:{quiz_num}',100)
+                return self.ranking_alunos_maior_acerto(f'quiz:{quiz_num}',10)
             case 7:
-                return self.ranking_mais_rapidos(f'quiz:{quiz_num}')
+                return self.ranking_mais_rapidos(f'quiz:{quiz_num}',10)
             case _:
                 raise Exception("Numero de leaderboard nao ncontrado")
             
