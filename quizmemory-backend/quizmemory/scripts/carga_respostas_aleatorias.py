@@ -23,7 +23,7 @@ def register_and_answer_v2(id):
         # print(questions_ids)
         for question_id in questions_ids:
             chosen_answer = random.choices(['A','B','C','D'])[0]
-            time_to_anser = random.randint(1,30)
+            time_to_anser = random.randint(1,21000)
             anser_service.register_response(question_id,id,chosen_answer,time_to_anser)
             
     # r.quit()
@@ -33,9 +33,9 @@ if __name__ == '__main__':
     ##### ALUNOS
     print("Iniciando processo")
     # N_STUDENTS = 1_000_000 #para o teste final
-    # N_STUDENTS = 200_000 #para desenvlvimento de testes mais rapidos 
+    N_STUDENTS = 200_000 #para desenvlvimento de testes mais rapidos 
     # N_STUDENTS = 50_000 #para desenvlvimento de testes mais rapidos 
-    N_STUDENTS = 1_000 #para desenvlvimento de testes mais rapidos 
+    # N_STUDENTS = 1_000 #para desenvlvimento de testes mais rapidos 
     # register_and_answer(1)
     with Pool(MAX_PROCESS) as p:
         print("Pool Criada")

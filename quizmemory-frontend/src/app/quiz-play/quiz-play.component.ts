@@ -46,7 +46,11 @@ export class QuizPlayComponent implements OnInit {
       this.timeLeft--;
       if (this.timeLeft <= 0) {
         let timeToAnswer = this.maxTimePerQuestion+1;
-        this.resetTimer();
+        let quiz_num:any = this.quizId?.split(':')[1];
+        let question_num:any = this.currentQuestion.id.split(":")[3];
+        let username:any = sessionStorage.getItem('username');
+        this.quizService.submitAnswer(quiz_num,question_num,username,timeToAnswer,"invalid").subscribe(x=>x);
+        // this.resetTimer();
         this.nextQuestion();
       }
     }, 1000);
@@ -57,7 +61,8 @@ export class QuizPlayComponent implements OnInit {
     let timeToAnswer = this.maxTimePerQuestion - currentTime;
     let quiz_num:any = this.quizId?.split(':')[1];
     let question_num:any = this.currentQuestion.id.split(":")[3];
-    this.quizService.submitAnswer(quiz_num,question_num,"1",timeToAnswer,option).subscribe(x=>x);
+    let username:any = sessionStorage.getItem('username');
+    this.quizService.submitAnswer(quiz_num,question_num,username,timeToAnswer,option).subscribe(x=>x);
     if (this.currentQuestion.answer === option) {
       this.score++;
     }

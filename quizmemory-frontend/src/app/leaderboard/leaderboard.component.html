@@ -1,0 +1,20 @@
+<div class="leaderbardcontainer">
+    <div>
+        <div *ngIf="leaderboardId==1"> Alternativas Mais Votadas</div>
+        <div *ngIf="leaderboardId==2"> Questoes  Mais Acertadas</div>
+        <div *ngIf="leaderboardId==3">  Questoes com mais abstencoes</div>
+        <div *ngIf="leaderboardId==4"> Tempo medio de resposta por questao</div>
+        <div *ngIf="leaderboardId==5"> Alunos com acertos mais rapidos</div>
+        <div *ngIf="leaderboardId==6"> Alunos com maior acerto</div>
+        <div *ngIf="leaderboardId==7"> Alunos mais rapidos</div>
+    </div>
+    <div>
+        <ol >
+            <li *ngFor="let pos of positions |keyvalue">
+                <span>{{pos.key}}</span><span>   </span>
+                <span>{{pos.value}}</span>
+            </li>
+        </ol>
+    </div>
+    
+</div>

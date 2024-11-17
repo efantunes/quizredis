@@ -18,7 +18,7 @@ export class LoginComponent {
   login() {
     if (this.username) {
       // Salva o nome de usuário no localStorage ou serviço
-      localStorage.setItem('username', this.username);
+      sessionStorage.setItem('username', this.username);
       this.router.navigate(['/quiz-selection']);
     }
   }

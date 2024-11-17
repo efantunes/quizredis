@@ -6,6 +6,7 @@ from quizmemory.service.answer_service import AnswerService
 from quizmemory.service.enroll_service import  EnrollService
 from quizmemory.service.question_service import  QuestionService
 from quizmemory.config.redis_config import MyRedisSingletonPool
+from quizmemory.service.leaderboards_service import LeaderboardsService
 import redis
 from quizmemory.model.answer_request import AnswerRequest,EnrollRequest
 
@@ -13,6 +14,7 @@ MAX_PROCESS = 20
 answer_service = AnswerService(MyRedisSingletonPool.get_instance())
 enroll_service = EnrollService(MyRedisSingletonPool.get_instance())
 question_service = QuestionService(MyRedisSingletonPool.get_instance())
+leaderboard_service = LeaderboardsService(MyRedisSingletonPool.get_instance())
 
 origins = [
     "http://localhost",
@@ -61,4 +63,8 @@ def get_all_quizzes():
 @app.get("/quiz/{quiz_num}/questions")
 def get_all_quizzes(quiz_num:int):
     return question_service.get_questions(quiz_num)
+
+@app.get("/quiz/{quiz_num}/leaderboards/{leaderboard_num}")
+def get_all_quizzes(quiz_num:int,leaderboard_num:int):
+    return leaderboard_service.get_leaderboard(quiz_num,leaderboard_num)
     

@@ -49,4 +49,6 @@ class AnswerService:
                 r.expire(f'leaderboard:mais_acertos:{quiz_id}',EXPIRATION_TIME) #30 dias
                 r.zincrby(f'leaderboard:mais_rapidos_corretos:{quiz_id}',time_to_anser,f'student:{student_id}') 
                 r.expire(f'leaderboard:mais_rapidos_corretos:{quiz_id}',EXPIRATION_TIME) #30 dias
+                r.zincrby(f'leaderboard:mais_rapidos_corretos_e_acertos:{quiz_id}',1000*1-(time_to_anser/1000.0),f'student:{student_id}') 
+                r.expire(f'leaderboard:mais_rapidos_corretos_e_acertos:{quiz_id}',EXPIRATION_TIME) #30 dias
             

@@ -59,10 +59,10 @@ def ranking_questoes_abstencoes(quiz_id):
     # questions = r.lrange(f'{quiz_id}:questions',0,-1)
     # acertos_por_questao = {question_id:r.get(f'statistics:{question_id}:total_correct') for question_id in questions}
     # return sorted(acertos_por_questao.items(),key = lambda x: -x[1])
-def ranking_alunos_maior_acerto(quiz_id):
-    return r.zrevrange(f'leaderboard:mais_acertos:{quiz_id}',0,-1,withscores=True)
+def ranking_alunos_maior_acerto(quiz_id,qnt=-1):
+    return r.zrevrange(f'leaderboard:mais_acertos:{quiz_id}',0,qnt,withscores=True)
     # return r.zrevrange(f'leaderboard:mais_acertos:{quiz_id}',0,1000,withscores=True)
-def ranking_mais_rapidos_corretos(quiz_id):
+def ranking_mais_rapidos_corretos_v0(quiz_id):
     return r.zunion(
         keys={
             f'leaderboard:mais_acertos:{quiz_id}':-10,
@@ -70,7 +70,9 @@ def ranking_mais_rapidos_corretos(quiz_id):
         },withscores=True
     )
     # return r.zrange(,0,-1,withscores=True)
-   
+def ranking_mais_rapidos_corretos(quiz_id,qnt=-1):
+    return r.zrevrange(f'leaderboard:mais_rapidos_corretos_e_acertos:{quiz_id}',0,qnt,withscores=True)
+    # return r.zrange(,0,-1,withscores=True)
 def ranking_mais_rapidos(quiz_id):
     return r.zrange(f'leaderboard:{quiz_id}:mais_rapido',0,-1,withscores=True)
            
@@ -88,42 +90,49 @@ if __name__ == '__main__':
         print ("0. Avaliação de performance da captura de respostas")
         print(timeit.timeit(stmt='answer_service.register_response("quiz:1:question:1","1","b",16)',setup="from __main__ import answer_service",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #1. Alternativas mais votadas
+        print ("="*25)
         print ("1. Alternativas mais votadas")
         print(ranking_alternativas("quiz:1"))
         print(ranking_alternativas("quiz:2"))
         print(timeit.timeit(stmt='ranking_alternativas("quiz:1")',setup="from __main__ import ranking_alternativas",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         print(timeit.timeit(stmt='ranking_alternativas("quiz:2")',setup="from __main__ import ranking_alternativas",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #2. Questoes mais acertadas
+        print ("="*25)
         print ("2. Questoes mais acertadas")
         print(ranking_questoes_corretas("quiz:1"))
         print(ranking_questoes_corretas("quiz:2"))
         print(timeit.timeit(stmt='ranking_questoes_corretas("quiz:1")',setup="from __main__ import ranking_questoes_corretas",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         print(timeit.timeit(stmt='ranking_questoes_corretas("quiz:2")',setup="from __main__ import ranking_questoes_corretas",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #3. Questoes com mais abstencoes
+        print ("="*25)
         print ("3. Questoes com mais abstencoes")
         print(ranking_questoes_abstencoes("quiz:1"))
         print(ranking_questoes_abstencoes("quiz:2"))
         print(timeit.timeit(stmt='ranking_questoes_abstencoes("quiz:1")',setup="from __main__ import ranking_questoes_abstencoes",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         print(timeit.timeit(stmt='ranking_questoes_abstencoes("quiz:2")',setup="from __main__ import ranking_questoes_abstencoes",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #4. Tempo medio de resposta por questao
+        print ("="*25)
         print ("4. Tempo medio de resposta por questao")
         print(ranking_tempo_medio("quiz:1"))
         print(ranking_tempo_medio("quiz:2"))
         print(timeit.timeit(stmt='ranking_tempo_medio("quiz:1")',setup="from __main__ import ranking_tempo_medio",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         print(timeit.timeit(stmt='ranking_tempo_medio("quiz:2")',setup="from __main__ import ranking_tempo_medio",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #5.Alunos com acertos mais rapidos
-        print ("5.Alunos com acertos mais rapidos")
+        print ("="*25)
+        print ("5.Alunos com acertos mais rapidos - Limitado aos 5 mil primeiros")
         print(ranking_mais_rapidos_corretos("quiz:1")[:10])
         print(ranking_mais_rapidos_corretos("quiz:2")[:10])
-        print(timeit.timeit(stmt='ranking_mais_rapidos_corretos("quiz:1")',setup="from __main__ import ranking_mais_rapidos_corretos",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
-        print(timeit.timeit(stmt='ranking_mais_rapidos_corretos("quiz:2")',setup="from __main__ import ranking_mais_rapidos_corretos",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
+        print(timeit.timeit(stmt='ranking_mais_rapidos_corretos("quiz:1",5000)',setup="from __main__ import ranking_mais_rapidos_corretos",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
+        print(timeit.timeit(stmt='ranking_mais_rapidos_corretos("quiz:2",5000)',setup="from __main__ import ranking_mais_rapidos_corretos",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #6.Alunos com maior acerto
-        print ("6.Alunos com maior acerto")
+        print ("="*25)
+        print ("6.Alunos com maior acerto - Limitado aos 5 mil primeiros")
         print(ranking_alunos_maior_acerto("quiz:1")[:10])
         print(ranking_alunos_maior_acerto("quiz:2")[:10])
-        print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:1")',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
-        print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:2")',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
+        print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:1",5000)',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
+        print(timeit.timeit(stmt='ranking_alunos_maior_acerto("quiz:2",5000)',setup="from __main__ import ranking_alunos_maior_acerto",number=NUMBER_OF_TESTS)/NUMBER_OF_TESTS)
         #7. Alunos mais rapidos
+        print ("="*25)
         print ("7. Alunos mais rapidos")
         print(ranking_mais_rapidos("quiz:1")[:10])
         print(ranking_mais_rapidos("quiz:2")[:10])

@@ -21,6 +21,11 @@ export class QuizService {
     return this.http.get(`${this.apiUrl}/quiz/${quizId}/questions`);
   }
 
+  // Obter perguntas de um quiz específico
+  getLeaderboards(quizId: string,leaderboard_num:number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/quiz/${quizId}/leaderboards/${leaderboard_num}`);
+  }
+
   // Enviar pontuação do usuário
   submitScore(quizId: number, score: number, username: string): Observable<any> {
     const payload = { quizId, score, username };

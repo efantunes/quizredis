@@ -4,7 +4,7 @@ import redis
 REDIS_HOST = os.environ.get('REDIS_HOST',"localhost") #
 REDIS_PORT = os.environ.get('REDIS_PORT',6379) # 
 
-MAX_PROCESS = 20
+MAX_PROCESS = 14
 
 class MyRedisSingletonPool:
     redis_pool = None

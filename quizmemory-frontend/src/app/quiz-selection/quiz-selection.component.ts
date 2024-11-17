@@ -22,6 +22,7 @@ export class QuizSelectionComponent implements OnInit {
   }
 
   selectQuiz(quizId: string) {
-    this.router.navigate(['/quiz-play'], { queryParams: { quizId } });
+    // this.router.navigate(['/quiz-play'], { queryParams: { quizId } });
+    this.router.navigate(['/action-selection'], { queryParams: { quizId } });
   }
 }
