@@ -61,10 +61,10 @@ def get_all_quizzes():
     return question_service.gel_all_quizzes()
 
 @app.get("/quiz/{quiz_num}/questions")
-def get_all_quizzes(quiz_num:int):
+def get_questions_from_quiz(quiz_num:int):
     return question_service.get_questions(quiz_num)
 
 @app.get("/quiz/{quiz_num}/leaderboards/{leaderboard_num}")
-def get_all_quizzes(quiz_num:int,leaderboard_num:int):
+def get_leaderboard_for_quiz(quiz_num:int,leaderboard_num:int):
     return leaderboard_service.get_leaderboard(quiz_num,leaderboard_num)
     
